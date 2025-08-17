@@ -1,0 +1,13 @@
+[
+  {
+    "id": 1,
+    "patientName": "raj sharma",
+    "patientPhone": "9142892678",
+    "doctorId": 4,
+    "date": "2025-08-17",
+    "startTime": "13:38",
+    "endTime": "13:58",
+    "status": "confirmed",
+    "reason": "vomiting and fever"
+  }
+]
