@@ -1,0 +1,7 @@
+# robots.txt for Meera Clinic Appointment System
+
+User-agent: *
+Disallow: /api/
+Allow: /
+
+Sitemap: https://meera-clinic.thefstack.com/sitemap.xml

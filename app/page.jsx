@@ -214,7 +214,8 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex items-center">
-              <div className="flex-shrink-0">
+              <div className="flex-shrink-0 flex items-center space-x-2">
+              <img src="/logo.png" alt="meera clinic logo" className=' h-16 w-20' />
                 <h1 className="text-2xl font-bold text-emerald-600">Meera Clinic</h1>
               </div>
             </div>
@@ -226,9 +227,9 @@ export default function HomePage() {
                 <button onClick={() => scrollToSection('doctors')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Doctors</button>
                 <button onClick={() => scrollToSection('about')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">About</button>
                 <button onClick={() => scrollToSection('contact')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Contact</button>
-                <Link href="/doctor/login">
+                {/* <Link href="/doctor/login">
                   <Button variant="outline" size="sm" className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white">Doctor Login</Button>
-                </Link>
+                </Link> */}
               </div>
             </div>
 
