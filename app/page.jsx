@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Calendar, Clock, Users, Stethoscope, MessageCircle, Star, Phone, Mail, MapPin, Shield, Award, Heart, Activity, CheckCircle, Quote, ArrowRight, Zap, Users2, Globe } from 'lucide-react'
+import Image from 'next/image'
 
 export default function HomePage() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -24,65 +25,65 @@ export default function HomePage() {
 
   const doctors = [
     {
-      id: 1,
-      name: "Dr. Sarah Johnson",
-      specialty: "Cardiologist",
-      experience: "15 years",
-      rating: 4.9,
-      image: "/placeholder-lnkb2.png",
-      education: "Harvard Medical School",
-      certifications: "Board Certified Cardiologist"
-    },
-    {
-      id: 2,
-      name: "Dr. Michael Chen",
-      specialty: "Neurologist",
-      experience: "12 years",
-      rating: 4.8,
-      image: "/male-neurologist.png",
-      education: "Johns Hopkins University",
-      certifications: "Board Certified Neurologist"
-    },
-    {
-      id: 3,
-      name: "Dr. Emily Davis",
-      specialty: "Pediatrician",
-      experience: "10 years",
-      rating: 4.9,
-      image: "/placeholder-fu1h9.png",
-      education: "Stanford Medical School",
-      certifications: "Board Certified Pediatrician"
-    },
-    {
-      id: 4,
-      name: "Dr. Robert Wilson",
-      specialty: "Orthopedic Surgeon",
-      experience: "18 years",
-      rating: 4.9,
-      image: "/placeholder.svg?height=300&width=300&text=Dr.+Wilson",
-      education: "Mayo Clinic",
-      certifications: "Board Certified Orthopedic Surgeon"
-    },
-    {
-      id: 5,
-      name: "Dr. Lisa Martinez",
-      specialty: "Dermatologist",
-      experience: "8 years",
-      rating: 4.8,
-      image: "/placeholder.svg?height=300&width=300&text=Dr.+Martinez",
-      education: "UCLA Medical School",
-      certifications: "Board Certified Dermatologist"
-    },
-    {
-      id: 6,
-      name: "Dr. James Thompson",
-      specialty: "General Practitioner",
-      experience: "20 years",
-      rating: 4.9,
-      image: "/placeholder.svg?height=300&width=300&text=Dr.+Thompson",
-      education: "University of Michigan",
-      certifications: "Board Certified Family Medicine"
-    }
+    id: 1,
+    name: "Dr. Sarah Johnson",
+    specialty: "Cardiologist",
+    experience: "15 years",
+    rating: 4.9,
+    image: "/Shurti-Doctor.webp",
+    education: "Harvard Medical School",
+    certifications: "Board Certified Cardiologist"
+  },
+  {
+    id: 2,
+    name: "Dr. Michael Chen",
+    specialty: "Neurologist",
+    experience: "12 years",
+    rating: 4.8,
+    image: "/male-neurologist.png",
+    education: "Johns Hopkins University",
+    certifications: "Board Certified Neurologist"
+  },
+  {
+    id: 3,
+    name: "Dr. Emily Davis",
+    specialty: "Pediatrician",
+    experience: "10 years",
+    rating: 4.9,
+    image: "/emily.webp",
+    education: "Stanford Medical School",
+    certifications: "Board Certified Pediatrician"
+  },
+  {
+    id: 6,
+    name: "Dr. Anil Kapoor", 
+    specialty: "Orthopedic Surgeon", 
+    experience: "18 years",
+    rating: 4.9,
+    image: "/robert.webp",
+    education: "Mayo Clinic",
+    certifications: "Board Certified Orthopedic Surgeon"
+  },
+  {
+    id: 5,
+    name: "Dr. Priya Sharma", 
+    specialty: "Dermatologist",
+    experience: "8 years",
+    rating: 4.8,
+    image: "/lisa.webp",
+    education: "UCLA Medical School",
+    certifications: "Board Certified Dermatologist"
+  },
+  {
+    id: 4,
+    name: "Dr. Ravish Mehta", 
+    specialty: "General Physician", 
+    experience: "20 years",
+    rating: 4.9,
+    image: "/james.webp",
+    education: "University of Michigan",
+    certifications: "Board Certified Family Medicine"
+  }
   ]
 
   const services = [
@@ -222,11 +223,11 @@ export default function HomePage() {
             
             <div className="hidden md:block">
               <div className="ml-10 flex items-baseline space-x-4">
-                <button onClick={() => scrollToSection('home')} className="text-gray-900 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Home</button>
-                <button onClick={() => scrollToSection('services')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Services</button>
-                <button onClick={() => scrollToSection('doctors')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Doctors</button>
-                <button onClick={() => scrollToSection('about')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">About</button>
-                <button onClick={() => scrollToSection('contact')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium">Contact</button>
+                <button onClick={() => scrollToSection('home')} className="text-gray-900 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">Home</button>
+                <button onClick={() => scrollToSection('services')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">Services</button>
+                <button onClick={() => scrollToSection('doctors')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">Doctors</button>
+                <button onClick={() => scrollToSection('about')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">About</button>
+                <button onClick={() => scrollToSection('contact')} className="text-gray-500 hover:text-emerald-600 px-3 py-2 rounded-md text-sm font-medium cursor-pointer">Contact</button>
                 {/* <Link href="/doctor/login">
                   <Button variant="outline" size="sm" className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white">Doctor Login</Button>
                 </Link> */}
@@ -275,12 +276,12 @@ export default function HomePage() {
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <Link href="/chat">
-                  <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700">
+                  <Button size="lg" className="bg-emerald-600 hover:bg-emerald-700 cursor-pointer">
                     <MessageCircle className="mr-2 h-5 w-5" />
                     Chat with AI Assistant
                   </Button>
                 </Link>
-                <Button variant="outline" size="lg" className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white" onClick={() => scrollToSection('doctors')}>
+                <Button variant="outline" size="lg" className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white cursor-pointer" onClick={() => scrollToSection('doctors')}>
                   <Users className="mr-2 h-5 w-5" />
                   View Our Doctors
                 </Button>
@@ -384,12 +385,14 @@ export default function HomePage() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {doctors.map((doctor) => (
-              <Card key={doctor.id} className="overflow-hidden hover:shadow-lg transition-shadow">
+              <Card key={doctor.id} className="overflow-hidden hover:shadow-lg transition-shadow py-0">
                 <div className="aspect-w-1 aspect-h-1">
-                  <img 
+                  <Image
+                    width={300}
+                    height={300} 
                     src={doctor.image || "/placeholder.svg"} 
                     alt={doctor.name}
-                    className="w-full h-64 object-cover"
+                    className="w-full h-64 object-fill"
                   />
                 </div>
                 <CardContent className="p-6">
@@ -404,7 +407,7 @@ export default function HomePage() {
                       <span className="ml-1 text-gray-900 font-medium">{doctor.rating}</span>
                     </div>
                     <Link href={`/chat?doctor=${doctor.id}&name=${encodeURIComponent(doctor.name)}&specialty=${encodeURIComponent(doctor.specialty)}`}>
-                      <Button size="sm" variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white">
+                      <Button size="sm" variant="outline" className="border-emerald-600 text-emerald-600 hover:bg-emerald-600 hover:text-white cursor-pointer">
                         Book Now
                       </Button>
                     </Link>
@@ -510,8 +513,10 @@ export default function HomePage() {
               </div>
             </div>
             <div>
-              <img 
-                src="/placeholder.svg?height=500&width=600&text=About+Meera+Clinic" 
+              <Image
+                width={600}
+                height={500} 
+                src="/about.webp" 
                 alt="About Meera Clinic" 
                 className="rounded-lg shadow-lg"
               />
@@ -643,7 +648,7 @@ export default function HomePage() {
                       <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
                       <textarea rows={4} className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-emerald-500"></textarea>
                     </div>
-                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700">
+                    <Button className="w-full bg-emerald-600 hover:bg-emerald-700 cursor-pointer">
                       Send Message
                       <ArrowRight className="ml-2 h-4 w-4" />
                     </Button>
@@ -677,10 +682,10 @@ export default function HomePage() {
             <div>
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
-                <li><button onClick={() => scrollToSection('home')} className="text-gray-300 hover:text-white">Home</button></li>
-                <li><button onClick={() => scrollToSection('services')} className="text-gray-300 hover:text-white">Services</button></li>
-                <li><button onClick={() => scrollToSection('doctors')} className="text-gray-300 hover:text-white">Doctors</button></li>
-                <li><button onClick={() => scrollToSection('contact')} className="text-gray-300 hover:text-white">Contact</button></li>
+                <li><button onClick={() => scrollToSection('home')} className="text-gray-300 hover:text-white cursor-pointer">Home</button></li>
+                <li><button onClick={() => scrollToSection('services')} className="text-gray-300 hover:text-white cursor-pointer">Services</button></li>
+                <li><button onClick={() => scrollToSection('doctors')} className="text-gray-300 hover:text-white cursor-pointer">Doctors</button></li>
+                <li><button onClick={() => scrollToSection('contact')} className="text-gray-300 hover:text-white cursor-pointer">Contact</button></li>
               </ul>
             </div>
             <div>
@@ -704,7 +709,7 @@ export default function HomePage() {
             </div>
           </div>
           <div className="border-t border-gray-800 mt-8 pt-8 text-center">
-            <p className="text-gray-300">&copy; 2024 Meera Clinic. All rights reserved. | Privacy Policy | Terms of Service</p>
+            <p className="text-gray-300">&copy; 2025 Meera Clinic. All rights reserved. | Privacy Policy | Terms of Service</p>
           </div>
         </div>
       </footer>
