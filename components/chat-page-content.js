@@ -113,10 +113,14 @@ export default function ChatPage() {
     setIsLoading(true)
 
     try {
-      // Prepare request payload - only send current message and responseId
       const requestPayload = {
         message: currentInput,
         ...(responseId && { responseId }),
+        ...(doctorId && {
+          doctorId,
+          doctorName,
+          doctorSpecialty,
+        }),
       }
 
       console.log("Sending request:", requestPayload)
