@@ -8,13 +8,36 @@ import ReactMarkdown from "react-markdown"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ArrowLeft, Send, Bot, User, Calendar, Clock, Stethoscope } from "lucide-react"
+import { ArrowLeft, Send, Bot, User, Calendar, Clock, Stethoscope, Phone, PhoneOff, Mic, MicOff } from "lucide-react"
+import { useSimpleCall } from "@/hooks/use-simple-call"
+import { usePermissions } from "@/hooks/use-permissions"
 
 export default function ChatPage() {
   const searchParams = useSearchParams()
   const doctorId = searchParams.get("doctor")
   const doctorName = searchParams.get("name")
   const doctorSpecialty = searchParams.get("specialty")
+
+  const {
+    connectionStatus,
+    connectionState,
+    isCallActive,
+    isConnectionReady,
+    isAISpeaking,
+    isUserSpeaking,
+    isMuted,
+    toggleMute,
+    startCall,
+    beginCall,
+    endCall,
+    connectionMessage,
+    sessionError,
+  } = useSimpleCall()
+
+  const { permissionState, requestPermissions, errorMessage } = usePermissions()
+
+  const [showVoiceCall, setShowVoiceCall] = useState(false)
+  const [showPermissionError, setShowPermissionError] = useState(false)
 
   const [messages, setMessages] = useState(() => {
     if (doctorId) {
@@ -185,10 +208,50 @@ export default function ChatPage() {
     setMessages(doctorId ? [messages[0]] : []) // Keep initial message if doctor-specific
   }
 
+  const handleStartCall = async () => {
+    console.log("[v0] Starting voice call...")
+    setShowVoiceCall(true)
+    setShowPermissionError(false)
+
+    try {
+      if (permissionState !== "granted") {
+        console.log("[v0] Requesting permissions...")
+        const permissionGranted = await requestPermissions()
+        if (!permissionGranted) {
+          console.log("[v0] Permissions denied, cannot start call")
+          setShowVoiceCall(false)
+          setShowPermissionError(true)
+          return
+        }
+      }
+
+      // Only proceed if permissions were granted
+      await startCall()
+    } catch (error) {
+      console.error("[v0] Failed to start voice call:", error)
+      setShowVoiceCall(false)
+      setShowPermissionError(true)
+    }
+  }
+
+  useEffect(() => {
+    if (showVoiceCall && isConnectionReady && !isCallActive) {
+      console.log("[v0] Auto-starting voice session...")
+      beginCall()
+    }
+  }, [showVoiceCall, isConnectionReady, isCallActive, beginCall])
+
+  const handleEndCall = () => {
+    endCall()
+    setShowVoiceCall(false)
+  }
+
+  const handleBeginSession = () => {
+    beginCall()
+  }
+
   return (
     <div className="h-screen bg-gray-50 flex flex-col">
-      {" "}
-      {/* Changed min-h-screen to h-screen */}
       {/* Header */}
       <div className="bg-white shadow-sm border-b flex-shrink-0">
         <div className="max-w-6xl mx-auto px-4 py-4">
@@ -216,16 +279,118 @@ export default function ChatPage() {
               </div>
             </div>
 
-            {/* Debug info - remove in production */}
-            <div className="hidden md:flex items-center text-xs text-gray-400 flex-shrink-0">
-              {responseId ? `Session: ${responseId.slice(-8)}` : "New Session"}
-              <Button variant="ghost" size="sm" onClick={clearSession} className="ml-2 text-xs">
-                Clear
-              </Button>
+            <div className="flex items-center space-x-2">
+              {!showVoiceCall ? (
+                <Button
+                  onClick={handleStartCall}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center space-x-2 bg-transparent"
+                >
+                  <Phone className="h-4 w-4" />
+                  <span className="hidden sm:inline">Voice Call</span>
+                </Button>
+              ) : (
+                <Button onClick={handleEndCall} variant="destructive" size="sm" className="flex items-center space-x-2">
+                  <PhoneOff className="h-4 w-4" />
+                  <span className="hidden sm:inline">End Call</span>
+                </Button>
+              )}
+
+              {/* Debug info - remove in production */}
+              <div className="hidden md:flex items-center text-xs text-gray-400 flex-shrink-0">
+                {responseId ? `Session: ${responseId.slice(-8)}` : "New Session"}
+                <Button variant="ghost" size="sm" onClick={clearSession} className="ml-2 text-xs">
+                  Clear
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      {/* Permission Error Banner */}
+      {showPermissionError && (
+        <div className="bg-red-50 border-b border-red-200 px-4 py-3">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-start justify-between">
+              <div className="flex items-start space-x-3">
+                <div className="w-3 h-3 rounded-full bg-red-500 mt-1.5" />
+                <div>
+                  <p className="text-sm font-medium text-red-900">Voice Call Failed</p>
+                  <p className="text-xs text-red-700 mt-1">
+                    {errorMessage || "Unable to access microphone. Please check your browser permissions."}
+                  </p>
+                  <div className="mt-2 text-xs text-red-600">
+                    <p>To fix this:</p>
+                    <ul className="list-disc list-inside mt-1 space-y-1">
+                      <li>Click the microphone icon in your browser's address bar</li>
+                      <li>Select "Allow" for microphone access</li>
+                      <li>Refresh the page and try again</li>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <Button
+                onClick={() => setShowPermissionError(false)}
+                variant="ghost"
+                size="sm"
+                className="text-red-600 hover:text-red-700"
+              >
+                ✕
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {showVoiceCall && (
+        <div className="bg-blue-50 border-b border-blue-200 px-4 py-3">
+          <div className="max-w-6xl mx-auto">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-3">
+                <div
+                  className={`w-3 h-3 rounded-full ${
+                    connectionStatus === "connected"
+                      ? "bg-green-500"
+                      : connectionStatus === "connecting"
+                        ? "bg-yellow-500 animate-pulse"
+                        : "bg-red-500"
+                  }`}
+                />
+                <div>
+                  <p className="text-sm font-medium text-blue-900">
+                    {connectionStatus === "connected"
+                      ? "Voice Call Connected"
+                      : connectionStatus === "connecting"
+                        ? "Connecting..."
+                        : "Connection Failed"}
+                  </p>
+                  <p className="text-xs text-blue-600">
+                    {connectionMessage || sessionError || "Setting up voice connection"}
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center space-x-2">
+                {isCallActive && (
+                  <>
+                    <Button onClick={toggleMute} variant={isMuted ? "destructive" : "outline"} size="sm">
+                      {isMuted ? <MicOff className="h-4 w-4" /> : <Mic className="h-4 w-4" />}
+                    </Button>
+
+                    <div className="flex items-center space-x-2 text-xs">
+                      {isUserSpeaking && <span className="text-blue-600 font-medium">You're speaking</span>}
+                      {isAISpeaking && <span className="text-green-600 font-medium">AI is speaking</span>}
+                    </div>
+                  </>
+                )}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Chat Container */}
       <div className="flex-1 flex flex-col overflow-hidden">
         <div className="max-w-6xl mx-auto w-full flex-1 flex flex-col p-6 h-full">
@@ -239,12 +404,10 @@ export default function ChatPage() {
                       : "Hi! I'm your AI assistant. I can help you book appointments, find doctors, and answer your questions."}
                   </CardTitle>
                 </CardHeader>
-              )}{" "}
-              {/* Added gap-4 here */}
+              )}
+
               {/* Messages */}
               <div className="flex-1 overflow-y-auto space-y-4 min-h-0">
-                {" "}
-                {/* Removed mb-4 */}
                 {messages.length === 0 && (
                   <div className="text-center py-8">
                     <Bot className="h-12 w-12 text-emerald-600 mx-auto mb-4" />
@@ -270,6 +433,7 @@ export default function ChatPage() {
                     </div>
                   </div>
                 )}
+
                 {messages.map((message) => (
                   <div key={message.id} className={`flex ${message.role === "user" ? "justify-end" : "justify-start"}`}>
                     <div
@@ -381,6 +545,7 @@ export default function ChatPage() {
                 )}
                 <div ref={messagesEndRef} />
               </div>
+
               {/* Input Form */}
               <form onSubmit={handleSubmit} className="flex space-x-2 flex-shrink-0">
                 <Input
